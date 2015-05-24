@@ -7,7 +7,7 @@
 
 (function($){
     $.fn.flexImages = function(options){
-        var o = $.extend({ container: '.item', object: 'img', rowHeight: 180, maxRows: 0, truncate: 0 }, options);
+        var o = $.extend({ container: '.item', object: 'img', rowHeight: 180, maxRows: 0, truncate: false, onItemReady: undefined }, options);
         return this.each(function(){
             var grid = $(this), containers = $(grid).find(o.container), items = [], t = new Date().getTime(),
                 s = window.getComputedStyle ? getComputedStyle(containers[0], null) : containers[0].currentStyle;
@@ -38,6 +38,10 @@
                 row[x][0].style.width = new_w+'px';
                 row[x][0].style.height = row_h+'px';
                 row[x][0].style.display = 'block';
+                if (o.onItemReady) {
+                    o.onItemReady($(row[x][0]));
+                }
+
             }
         }
 
