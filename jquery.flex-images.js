@@ -7,7 +7,14 @@
 
 (function($){
     $.fn.flexImages = function(options){
-        var o = $.extend({ container: '.item', object: 'img', rowHeight: 180, maxRows: 0, truncate: false, onItemReady: undefined }, options);
+        var o = $.extend({
+            container: '.item',
+            object: 'img',
+            rowHeight: 180,
+            maxRows: 0,
+            truncate: false,
+            onItemReady: undefined
+        }, options);
         return this.each(function(){
             var grid = $(this), containers = $(grid).find(o.container), items = [], t = new Date().getTime(),
                 s = window.getComputedStyle ? getComputedStyle(containers[0], null) : containers[0].currentStyle;
@@ -25,7 +32,7 @@
             $(window).on('resize.flexImages'+t, function(){ makeGrid(grid, items, o); });
             grid.data('flex-t', t)
         });
-    }
+    };
 
     function makeGrid(grid, items, o, noresize){
         var x, new_w, ratio = 1, rows = 1, max_w = grid.width(), row = [], row_width = 0, row_h = o.rowHeight;
@@ -51,7 +58,9 @@
             row_width += items[i][2] + o.margin;
             if (row_width >= max_w) {
                 var margins_in_row = row.length * o.margin;
-                ratio = (max_w-margins_in_row) / (row_width-margins_in_row), row_h = Math.ceil(o.rowHeight*ratio), exact_w = 0, new_w;
+                ratio = (max_w-margins_in_row) / (row_width-margins_in_row);
+                row_h = Math.ceil(o.rowHeight*ratio);
+                var exact_w = 0;
                 for (x=0; x<row.length; x++) {
                     new_w = Math.ceil(row[x][2]*ratio);
                     exact_w += new_w + o.margin;
@@ -59,13 +68,14 @@
                     _helper();
                 }
                 // reset for next row
-                row = [], row_width = 0;
+                row = [];
+                row_width = 0;
                 rows++;
             }
         }
         // layout last row - match height of last row to previous row
         for (x=0; x<row.length; x++) {
-            new_w = Math.floor(row[x][2]*ratio), h = Math.floor(o.rowHeight*ratio);
+            new_w = Math.floor(row[x][2]*ratio);
             _helper(true);
         }
 
